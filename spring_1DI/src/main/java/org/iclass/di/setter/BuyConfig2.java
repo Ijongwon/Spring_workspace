@@ -1,11 +1,11 @@
-package org.iclass.di;
+package org.iclass.di.setter;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ComponentScan(basePackages = {"org.iclass.di","",""})
-public class BuyConfig {
+@ComponentScan(basePackages = {"org.iclass.di.setter","",""})
+public class BuyConfig2 {
 
 }
 //@Configuration 어노테이션 : 설정정보를 갖는 클래스

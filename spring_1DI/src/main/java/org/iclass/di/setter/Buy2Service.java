@@ -1,6 +1,7 @@
-package org.iclass.di;
+package org.iclass.di.setter;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 
@@ -15,10 +16,10 @@ public class Buy2Service {
 		this.dao = dao;
 	}
 	
-	/*
-	 * public Buy2Service() { System.out.println("::: Buy2Service 기본 생성자 :::"); }
-	 */
 	
+	public Buy2Service() { System.out.println("::: Buy2Service 기본 생성자 :::"); }
+	 
+	@Autowired
 	public void setDao(Buy2Dao dao) {
 		System.out.println("::: Buy2Service 다오 setter :::");
 		this.dao = dao;

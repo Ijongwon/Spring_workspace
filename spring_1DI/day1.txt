@@ -32,3 +32,49 @@ src/test/resources
 3) 소스 설명
 * org.iclass.java 패키지 코드 : 기존 자바 코드의 의존관계 객체 생성 방식
 * org.iclass.di 패키지 코드 : 스프링 의존관계의 빈 주입 방식
+
+4) 의존관계 자동 주입
+- 빈을 생성할 대상 패키지 설정 : BuyConfig.java => @Configuration, @ComponentScan*****
+- 스프링이 빈으로 만들 클래스 애노테이션 : @Component*****
+- 실행 목표 : Buy2Controller 의 buy 메소드 실행.
+- 첫번째 org.iclass.di.construct 패키지에서 생성자 자동 주입을 했습니다. => 커스텀 생성자
+			ㄴ 생성자 주입은 자동 주입 어노테이션 @Autowired 를 생략하고 작성 하지 않습니다.
+- 두번째 org.iclass.di.setter 패키지에서 setter 자동 주입을 했습니다. => 기본생성자 + setter
+			ㄴ setter 에 @Autowired 표기
+- 세번째 필드 주입 : 스프링 권고 사항으로는 사용하지 않습니다. 테스트 코드에서만 사용합니다.
+		ㄴ 의존관계 변수 선언부에 @Autowried 작성하면 필드 주입입니다.
+		
+** 확인 할 것 : 커스텀 생성자로 자동주입 동작한 후,
+			  만약 setter에 @Autowired 가 있다면 setter 주입을 또합니다.
+	--> 결론은 의존관계에 있는 필드는 final 로 선언해서 2가지 방법 중 하나만 사용하도록 문법적으로 결정합니다.
+		
+		
+** 자동 주입은 타입이 맞는 것을 주입하는 것 입니다.(타입 기반)
+   스프링빈의 기본은 싱글톤입니다.
+   컨트롤러, 서비스, dao는 기능만 있는 클래스에서는 객체가 여러개가 필요 없습니다.
+   혹시나... 타입이 같은 것이 여러개 있을 때 이름으로 지정할 수 있습니다. 그 때 사용하는 애노테이션은 @Qualifier Annotation
+   기본적인 빈의 이름을 바꿀 수 있습니다. @Component("이름")
+  
+** 자동주입에서 의존관계 타입을 인터페이스로 합니다.  (-> 느슨한 결합)
+   
+**   jsp의 빈은 데이터 객체
+   
+#### 새로운 프로젝트를 직접 만들어서 연습하기.
+
+	프로젝트 생성
++ File - New - Maven Project(other에서 찾기)
+	[X] Create a simple project 체크하기
+	groupID(도메인네임 즉 패키지명) - org.iclass
+	artifactId(산출물 즉 jar 파일명) 작성 - mySpringex1
+	
++ java 버전 확인 : build path 에서 라이브러리, project facets, java compiler 동일하게
++ pom.xml :
+	+ 기존 라이브러리 : lombok
+	+ 스프링 spring-context
+
+
+
+
+
+  
+   
