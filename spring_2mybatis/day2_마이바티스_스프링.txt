@@ -1,0 +1,108 @@
+### 스프링 day2 : Mybatis-spring 설정하기
+
+1. file - new - maven project 로 생성합니다.
+
+2. 프로젝트의 configure build path 에서 자바 버전 확인하세요.
+
+3. pom.xml 기존에 사용한 라이브러리에 아래를 추가합니다. 
+   - mybatis 와 spring-jdbc 와 mybatis-spring => mybatis-spring 에 모두 필요합니다.
+
+<!-- https://mvnrepository.com/artifact/org.mybatis/mybatis -->
+		<dependency>
+		    <groupId>org.mybatis</groupId>
+		    <artifactId>mybatis</artifactId>
+		    <version>3.5.6</version>
+		</dependency>
+		<!-- mybatis-spring -->	
+		<!-- https://mvnrepository.com/artifact/org.mybatis/mybatis-spring -->
+		<dependency>
+		    <groupId>org.mybatis</groupId>
+		    <artifactId>mybatis-spring</artifactId>
+		    <version>2.0.6</version>
+		</dependency>
+		<!-- spring-jdbc -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-jdbc</artifactId>
+			<version>${spring-version}</version>
+		</dependency>
+
+4. xml 저장할 src/main/resources 소스폴더 아래에  META-INF (일반)폴더 생성
+
+   + 메타데이터 : 시스템 동작에 필요한 데이터. 소스코드 동작에 필요한 데이터
+
+5. __mybatis-spring 설정하기__
+
++ META-INF/mybatis 폴더 : mybatis 설정에 필요한 파일
+		ㄴ mapper xml
+		ㄴ mybatis-config.xml
+		ㄴ db.properties
+
+6. mybats-spring 사용을 위한 bean 설정하기  : 
+방법1) xml 파일, 방법2) @Configuration 을 사용한 자바클래스
+
+방법1) META-INF/spring 폴더 : bean 정의 설정파일이 xml
+방법2) config 패키지의 MybatisConfig.java
+
+* 예시는 2가지 모두 있습니다. 가독성과 코딩의 편리함은 방법2 가 더 좋습니다.
+* spring boot 프로젝트에서는 6~7줄 정도로 프로퍼티 설정 방식으로 변경됩니다.
+
+
+7. mybatis-spring 에서 dao 설정 방법
+
++ mapper 태그 namespace 속성값으로 dao(매퍼)역할을 시키는 인터페이스를 설정합니다.
+
+//예시
+ <mapper namespace="org.iclass.dao.CommunityMapper">
+
+ + 해당 위치에 org.iclass.dao.CommunityMapper 를 생성해야 합니다.
+	
+ + 위의 인터페이스에 추상메소드를 정의합니다. mapper xml 의 sql 태그 참조합니다.
+    + id 값을 메소드 이름으로 합니다.
+    + parameterType 메소드 인자로 합니다.
+    + resultType 리턴 타입으로 합니다.
+
++ 인터페이스는 bean 생성 못합니다. 그래서 구현체가 만들어져서 sql 실행되는데
+com.sun.Proxy 프록시 자바 클래스가 대신 구현체 및 bean 을 생성해 줍니다.  
+
++ org.iclass.dao.CommunityMapper 애노테이션
+    + @Mapper
+
+방법1) bean 정의 xml 파일에 확인
+    + @Mapper 스캔할 패키지 설정
+    	<mybatis-spring:scan base-package="org.iclass.dao"/>
+방법2) MybatisConfig.java 에 @MapperScan(basePackages = {"org.iclass.dao"}) 작성
+
+8. spring-test 의존성 추가 (pom.xml)
+
+9. 테스트 Junit5        
+
+////////////////////////////////////////////////////////////////////////////
+[[SqlSessionTemplate]]은 
+MyBatis와 Spring을 통합하여 사용할 때 필요한 중요한 bean, 데이터베이스 작업을 효과적으로 처리하고 관리하는 데 도움을 줍니다.
+
+Mybatis 프레임워크에서
+SqlSession은 데이터베이스와의 상호 작용을 처리하기 위한 객체
+Mybatis-spring 에서
+SqlSessionTemplate은 SqlSession 세션을 관리. ``데이터베이스 트랜잭션``을 지원.
+
+트랜잭션 관리: 	@Transactional
+SqlSessionTemplate은 Spring에서 데이터베이스 트랜잭션을 관리. 데이터베이스 작업 중에 예외가 발생하면 롤백을 수행하고, 예외가 없으면 커밋.
+
+SQL 실행: 
+SqlSessionTemplate을 사용하여 SQL 문장을 실행. 
+MyBatis의 Mapper 인터페이스를 호출하면 실제로는 SqlSessionTemplate이 SQL을 실행하고 결과를 반환.
+
+예외 처리: 
+SqlSessionTemplate은 데이터베이스 작업 중 발생하는 예외를 처리. Spring의 예외 처리 방식으로 동작.
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+10. 연습 : new_member 테이블 select 전체, select by PK, insert , update
+	1. xml
+	2. 인터페이스 , vo 클래스
+	3. bean 정의 파일 수정하기
+	4. 테스트 클래스 만들기 
+	(select 전체, selectByPK,insert, delete)
+	5. type alias 설정
