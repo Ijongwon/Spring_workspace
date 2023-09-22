@@ -39,6 +39,7 @@ src/test/resources
 - 실행 목표 : Buy2Controller 의 buy 메소드 실행.
 - 첫번째 org.iclass.di.construct 패키지에서 생성자 자동 주입을 했습니다. => 커스텀 생성자
 			ㄴ 생성자 주입은 자동 주입 어노테이션 @Autowired 를 생략하고 작성 하지 않습니다.
+			=> 생성자가 생성될때 생성자를 통해 의존 관계에 있는 bean 을 자동 주입 하는 것
 - 두번째 org.iclass.di.setter 패키지에서 setter 자동 주입을 했습니다. => 기본생성자 + setter
 			ㄴ setter 에 @Autowired 표기
 - 세번째 필드 주입 : 스프링 권고 사항으로는 사용하지 않습니다. 테스트 코드에서만 사용합니다.
