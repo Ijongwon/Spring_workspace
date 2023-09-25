@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	1. 이 파일은 bean 설정 파일입니다. 어떤 라이브러리의 클래스들을 bean으로 만들어야 할때 사용합니다.
+	bean 태그로 정의한것이 1개의 싱글톤 bean으로 만들어 집니다. 
+	beans 태그 안에 xmlns 속성은 태그 사용을 위해 필요한 url 입니다.
+	웹 애플리케이션 프로젝트에서는 root-context.xml 에 ApplicationContext(spring-context) 가 생성해야 할 bean을 정의합니다.
+	이 파일은 web.xml에서 contextConfigLocation 파라미터로 지정됩니다.
+-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
+	xsi:schemaLocation="http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+	
+	<!--1. @Component 찾을 패키지 위치 -->
+	<context:component-scan base-package="org.iclass.mvc"/> 
+	
+	<!--3. db.properties 위치 설정하기  
+		   src/main/resources 폴더가 classpath 입니다.
+	-->
+	<context:property-placeholder location="classpath:META-INF/mybatis/db.properties"/>
+	
+	<!--4. dbcp(db커넥션풀) 지원하는 dataSource bean 생성정의하기  
+		id는 bean의 이름, class는 bean을 만들 패키지명.클래스
+	-->
+	<bean id="datasource" 
+	class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+		<!-- 프로퍼티 설정합니다. String 은 객체이만 bean으로 만들지 않으므로 value로 설정 -->
+		<property name="driverClass" value="${db.driver}"/>
+		<property name="url" value="${db.url}"/>
+		<property name="username" value="${db.username}"/>
+		<property name="password" value="${db.password}"/>
+	</bean>
+	<!--5. mybatis-spring 설정 :  sqlSessionFactoryBean bean(객체) 생성정의하기 -->
+	<bean id="sqlSessionFactoryBean" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<!--프로퍼티 설정 설정. 
+		property 태그에 ref 속성으로 설정한 것은 bean 이며 setter 주입에 해당합니다.
+		ref 속성에 설정된 값이 주입되는 bean의 이름입니다.
+		-->
+		<property name="dataSource" ref="datasource"/>
+		<property name="configLocation" 
+					value="classpath:META-INF/mybatis/mybatis-config.xml"/>
+		<property name="mapperLocations">  <!-- 이 프로퍼티의 value는 타입이 List입니다.  -->
+			<!-- 6. mybatis 매퍼 xml-->
+			<list> <!-- ArrayList 와 같은 컬렉션이 프로퍼티 값으로 참조됩니다. -->
+				<value>classpath:META-INF/mybatis/community.xml</value>
+				<value>classpath:META-INF/mybatis/communityComments.xml</value>
+				<!--<value></value>-->
+			</list>
+		</property>
+	</bean>
+	<!-- 7. sqlSessionTemplate bean으로 sql 실행이 됩니다. -->
+	<bean class="org.mybatis.spring.SqlSessionTemplate" id="sqlSessionTemplate">
+		<!-- 의존관계 생성자 주입 -->
+		<constructor-arg ref="sqlSessionFactoryBean"/>
+	</bean>
+	<!-- 8. mybatis-spring는 community.xml(매퍼파일)과 연결되는 인터페이스를 사용합니다. @MapperScan과 같은 기능
+			그 매퍼 인터페이스의 패키지를 알려줘야 합니다. 인터페이스 구현체는 프록시 클래스가 만듭니다.-->	
+	<mybatis-spring:scan base-package="org.iclass.mvc.dao"/>
+	
+</beans>
