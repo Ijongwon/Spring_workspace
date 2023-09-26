@@ -31,7 +31,7 @@ if(temp!=null && temp.equals("w"))
 <div class="container mt-3 width30">
   <h2>회원 로그인</h2>
   <label id="incorrect">계정 정보가 일치하지 않습니다.</label>
-  <form action="loginAction.jsp" method="post">
+  <form action="login" method="post">
     <div class="mb-3 mt-3">
       <label for="userid">아이디:</label>
       <input class="form-control" id="userid" placeholder="Enter id" 
@@ -53,8 +53,11 @@ if(temp!=null && temp.equals("w"))
   </form>
 </div>
   <script type="text/javascript">
-  	console.log('${param.incorrect}')
-  	if('${param.incorrect}'==='y')
+
+  if('${message}'.length !=0) alert('${message}');
+
+  	console.log('${incorrect}')
+  	if('${incorrect}'==='y')
   		document.getElementById('incorrect').style.display='inline-block'
   </script>
 </body>

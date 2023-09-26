@@ -74,8 +74,7 @@
 	</div>
 </div>
 <script type="text/javascript"> /* javascript:write() */
-if('${message}'.length !=0)
-	alert('${message}');
+if('${message}'.length !=0) alert('${message}');
 	
 	function write() {
 		let yn
