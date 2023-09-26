@@ -11,7 +11,7 @@
 	<!-- spring MVC 는 애노테이션 방식으로 동작시키며 자동으로 bean으로 생성된다. -->
 	<annotation-driven />
 
-	<!--  webapp/resources 디렉토리의 정적인 자원들 css, js, 이미지등의 GET요청을 처리하는 url은  /resources 로 시작하도록 정의한다. 
+	<!--  webapp/resources 디렉토리의 정적인 자원들 css, js, 이미지등의 GET요청을 처리하는 url은  /resources 로 시작하도록 정의한다.(mapping 프로퍼티) 
 		 spring MVC 에서 처리하지 않는 리소스 입니다.
 	-->
 	<resources mapping="/resources/**" location="/resources/" />
