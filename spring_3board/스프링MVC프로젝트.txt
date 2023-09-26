@@ -47,7 +47,30 @@
 3) 파라미터 저장은 핸들러 메소드의 인자로 선언된 변수가 자동으로 한다.
 @RequestParam(defaultValue = "1") 은 파라미터 초기값을 설정하는 형식이다.
 4) 파라미터로 받은 값이 다시 view 로 전달할 때에는 @ModelAttribute로 설정한다.
+			ㄴ View 와 redirect 모두 전달할 수 있습니다.(RedirectAttributes 의 addAttribute() 와 동일함)
+			ㄴ redirect 로 전달하면 파라미터가 됩니다.
 5) 파라미터가 많을 때, 그것들을 필드로 갖는 dto 또는 map 타입으로 선언하여 전달받는다.
-			ㄴ 파라미터의 name 속성과 일치하는 필드만 매핑이 됩니다.
+			ㄴ 파라미터의 name 속성과 일치하는 필드만 매핑이 됩니다.(dto에 setter 필수!!)
+			ㄴ map 으로 파라미터 받을 때 @RequestParam 필수
 6) Post 요청을 처리한 후 다른 url 로 리 다이렉트 할 때에는 return "redirect:URL 주소"; 형식으로 한다.
+7) 6번과 같이 리다이렉트 할 때 스프링의 특징 : RedirectAttributes 를 사용해서 리다이렉트 url에 파라미터를 지정
 
+* 보충 설명 : 
+	*Model 객체의 aaddAttribute() 메소드는 
+	☆jsp에서 request.setAttribute 또는 session.setAttribute 와 같은 동작을 합니다.
+	*RedirectAttributes 객체의 addAttribute() redirect:url 에 파라미터를 설정하는 역할
+		   		☆ addFlashAttribute() 는 파라미터가 아닙니다. 
+		   						   임시 데이터 값을 저장하므로 url 에 표시 안합니다.(1회용)
+		   		  addAttribute() 는 redirect url 에 파라미터를 설정하는 역할(-> Model 객체로 대체가능)
+		   		  
+		   		  
+		   		  
+4. session 사용방법
+방법 1) Model 객체로 addAttribute() 하고 애트리뷰트 이름을 @SessionAttributes 어노테이션으로 지정하기
+	  이 때는 반드시 logout(세션 데이터 삭제) 을 SessionStatus 객체로만 할 수 있음.
+	  
+방법 2) 기존 서블릿에서와 같이 메소드 인자로 GttpSession 타입을 선언하여 session.setAttribute 로 저장하기
+	   이 때는 반드시 logout을 HttpSession 객체로 합니다.
+	   
+※ @SessionAttribute("user") BookUser user 를 메소드 인자로 선언하면 세션에 저장된 user 애트리뷰트를 가져올 수 있습니다.
+	ㄴ 단, 이 때는 방법1) 과 방법2)로 저장된 것 모두를 가져올 수 있습니다.
