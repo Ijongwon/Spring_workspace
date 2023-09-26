@@ -19,7 +19,7 @@
 	<p><a href="logout">로그아웃</a></p>
 </c:if>
 <c:if test="${user ==null }">
-	<p><a href="login.jsp">로그인</a></p>
+	<p><a href="login">로그인</a></p>
 	<p><a href="member/join">회원가입</a></p>
 </c:if>
 	<p><a href="community/list">커뮤니티</a></p>
