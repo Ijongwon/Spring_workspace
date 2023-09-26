@@ -27,6 +27,7 @@
 		select *
 		from CommunityComments
 		where  mref=#{idx} 
+		order by idx desc
 		</select>
 		
 	<update id="setCommentCount" parameterType="long">
